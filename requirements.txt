@@ -3,3 +3,4 @@ firebase-admin>=7.0.0
 stripe>=12.4.0
 requests>=2.32.4
 Pillow>=11.3.0
+python-dotenv=>1.1.1
