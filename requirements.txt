@@ -1,0 +1,5 @@
+streamlit>=1.46.1
+firebase-admin>=7.0.0
+stripe>=12.4.0
+requests>=2.32.4
+Pillow>=11.3.0
