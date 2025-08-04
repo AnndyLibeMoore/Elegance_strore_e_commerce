@@ -16,19 +16,23 @@ with open("estilos/css_login.html", "r") as file:
     html_content = file.read()
 st.markdown(html_content, unsafe_allow_html=True)
 
-# Se ejecuta una única vez cuando carga la aplicación
-if 'has_run' not in st.session_state:
-    st.session_state.has_run = True
-    service_account_key_path = 'serviceAccountKey.json'
-    collection_name = "usuarios"
-    st.session_state.redirect_uri = "http://localhost:8501"
-
-    # --- Inicialización de Firebase ADMIN SDK ---
-    if not firebase_admin._apps:
+# --- Inicialización de Firebase ADMIN SDK ---
+if not firebase_admin._apps:
+    try:
         firebase_config =json.loads(st.secrets["firebase_creds"]["KEY_CONTENT"])
         cred = credentials.Certificate(firebase_config)
         firebase_admin.initialize_app(cred)
-    st.session_state.db = firestore.client()
+        st.session_state.db = firestore.client()
+    except Exception as e:
+        st.error(f"Error al inicializar Firebase: {str(e)}")
+        st.stop()  # Detiene la app si hay error    
+
+# Se ejecuta una única vez cuando carga la aplicación
+if 'has_run' not in st.session_state:
+    st.session_state.has_run = True
+    #service_account_key_path = 'serviceAccountKey.json'
+    collection_name = "usuarios"
+    st.session_state.redirect_uri = "http://localhost:8501"
 
     # Inicia el Cliente de Google
     st.session_state.google_client_id = os.environ.get("GOOGLE_CLIENT_ID")
