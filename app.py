@@ -6,6 +6,7 @@ from firebase_admin import credentials, auth, firestore
 from dotenv import load_dotenv
 import requests
 from datetime import datetime
+import json
 load_dotenv()
 
 # Configuración de la página
