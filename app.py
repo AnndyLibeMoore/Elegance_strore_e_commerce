@@ -25,7 +25,8 @@ if 'has_run' not in st.session_state:
 
     # --- Inicialización de Firebase ADMIN SDK ---
     if not firebase_admin._apps:
-        cred = credentials.Certificate(service_account_key_path)
+        firebase_config =json.loads(st.secrets["firebase_creds"]["KEY_CONTENT"])
+        cred = credentials.Certificate(firebase_config)
         firebase_admin.initialize_app(cred)
     st.session_state.db = firestore.client()
 
