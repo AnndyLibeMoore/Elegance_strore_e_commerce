@@ -26,8 +26,11 @@ if 'has_run' not in st.session_state:
     st.session_state.redirect_uri = "http://localhost:8501"
 
     # --- Inicialización de Firebase ADMIN SDK ---
+    # Obtiene el JSON de credenciales de Firebase desde el secreto de Streamlit
+  firebase_creds = os.getenv("KEY_CONTENT")
+
     if not firebase_admin._apps:
-        creed_dict = json.loads(firebase_creds)
+        cred_dict = json.loads(firebase_creds)
         cred = credentials.Certificate(cred_dict)
         firebase_admin.initialize_app(cred)
     st.session_state.db = firestore.client()
