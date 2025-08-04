@@ -17,6 +17,12 @@ with open("estilos/css_login.html", "r") as file:
     html_content = file.read()
 st.markdown(html_content, unsafe_allow_html=True)
 
+
+# --- Configuración del emulador (DEBE ESTAR ANTES de initialize_app) ---
+if os.environ.get("LOCAL_DEV") == "true":  # Usa una variable de entorno para control
+    os.environ["FIRESTORE_EMULATOR_HOST"] = "localhost:8080"  # ¡Mismo puerto que tu emulador!
+    st.sidebar.success("🔧 Modo desarrollo: usando Firestore Emulator")
+
 # --- Inicialización de Firebase ADMIN SDK ---
 if not firebase_admin._apps:
     try:
