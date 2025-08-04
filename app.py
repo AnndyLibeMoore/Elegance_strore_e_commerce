@@ -18,28 +18,18 @@ with open("estilos/css_login.html", "r") as file:
 st.markdown(html_content, unsafe_allow_html=True)
 
 
-# --- Configuración del emulador (DEBE ESTAR ANTES de initialize_app) ---
-if os.environ.get("LOCAL_DEV") == "true":  # Usa una variable de entorno para control
-    os.environ["FIRESTORE_EMULATOR_HOST"] = "localhost:8080"  # ¡Mismo puerto que tu emulador!
-    st.sidebar.success("🔧 Modo desarrollo: usando Firestore Emulator")
-
-# --- Inicialización de Firebase ADMIN SDK ---
-if not firebase_admin._apps:
-    try:
-        firebase_config =json.loads(st.secrets["firebase_creds"]["KEY_CONTENT"])
-        cred = credentials.Certificate(firebase_config)
-        firebase_admin.initialize_app(cred)
-        st.session_state.db = firestore.client()
-    except Exception as e:
-        st.error(f"Error al inicializar Firebase: {str(e)}")
-        st.stop()  # Detiene la app si hay error    
-
 # Se ejecuta una única vez cuando carga la aplicación
 if 'has_run' not in st.session_state:
     st.session_state.has_run = True
-    #service_account_key_path = 'serviceAccountKey.json'
+    service_account_key_path = 'serviceAccountKey.json'
     collection_name = "usuarios"
     st.session_state.redirect_uri = "http://localhost:8501"
+
+    # --- Inicialización de Firebase ADMIN SDK ---
+    if not firebase_admin._apps:
+        cred = credentials.Certificate(service_account_key_path)
+        firebase_admin.initialize_app(cred)
+    st.session_state.db = firestore.client()
 
     # Inicia el Cliente de Google
     st.session_state.google_client_id = os.environ.get("GOOGLE_CLIENT_ID")
@@ -47,6 +37,7 @@ if 'has_run' not in st.session_state:
 
     #Inicializa el carrito de compras
     st.session_state.cart = []
+
 
 # Autenticación con Google
 def google_auth():
