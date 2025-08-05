@@ -27,11 +27,10 @@ if 'has_run' not in st.session_state:
 
     # --- Inicialización de Firebase ADMIN SDK ---
     # Obtiene el JSON de credenciales de Firebase desde el secreto de Streamlit
-    firebase_creds = os.getenv("KEY_CONTENT")
+    #firebase_creds = os.getenv("KEY_CONTENT")
 
     if not firebase_admin._apps:
-        cred_dict = json.loads(firebase_creds)
-        cred = credentials.Certificate(cred_dict)
+        cred = credentials.Certificate(service_account_key_path)
         firebase_admin.initialize_app(cred)
     st.session_state.db = firestore.client()
 
